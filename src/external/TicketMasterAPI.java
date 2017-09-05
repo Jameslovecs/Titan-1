@@ -55,6 +55,9 @@ public class TicketMasterAPI implements ExternalAPI {
 			JSONObject responseJson = new JSONObject(response.toString());
 			JSONObject embedded = (JSONObject) responseJson.get("_embedded");
 			JSONArray events = (JSONArray) embedded.get("events");
+			
+			System.out.println("Events" + events);
+			
 			return getItemList(events);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -99,6 +102,10 @@ public class TicketMasterAPI implements ExternalAPI {
 			builder.setCategories(getCategories(event));
 			builder.setImageUrl(getImageUrl(event));
 			builder.setUrl(getStringFieldOrNull(event, "url"));
+
+			builder.setLocalDate(getLocalDate(event));
+			builder.setLocalTime(getLocalTime(event));
+			
 			JSONObject venue = getVenue(event);
 			if (venue != null) {
 				if (!venue.isNull("address")) {
@@ -181,6 +188,9 @@ public class TicketMasterAPI implements ExternalAPI {
 
 	private Set<String> getCategories(JSONObject event) throws JSONException {
 		Set<String> categories = new HashSet<>();
+		if (event.isNull("classifications")) {
+			return categories;     // ADDED a null checking
+		}
 		JSONArray classifications = (JSONArray) event.get("classifications");
 		for (int j = 0; j < classifications.length(); j++) {
 			JSONObject classification = classifications.getJSONObject(j);
@@ -190,6 +200,39 @@ public class TicketMasterAPI implements ExternalAPI {
 		return categories;
 	}
 
+	private String getLocalDate(JSONObject event) throws JSONException {
+		if (!event.isNull("dates")) {
+			JSONObject dates = event.getJSONObject("dates");
+			if (!dates.isNull("start")) {
+				JSONObject start = dates.getJSONObject("start");
+				
+				if (!start.isNull("localDate")) {
+					System.out.println("get local Date! " + start.getString("localDate"));
+					return start.getString("localDate");
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	private String getLocalTime(JSONObject event) throws JSONException {
+		if (!event.isNull("dates")) {
+			JSONObject dates = event.getJSONObject("dates");
+			
+			if (!dates.isNull("start")) {
+				JSONObject start = dates.getJSONObject("start");
+				
+				if (!start.isNull("localTime")) {
+					System.out.println("get local Time! " + start.getString("localTime"));
+					return start.getString("localTime");
+				}
+			}
+		}
+		
+		return null;
+	}
+	
 	private String getStringFieldOrNull(JSONObject event, String field) throws JSONException {
 		return event.isNull(field) ? null : event.getString(field);
 	}

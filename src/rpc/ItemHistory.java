@@ -42,9 +42,14 @@ public class ItemHistory extends HttpServlet {
 		String userId = request.getParameter("user_id");
 		Set<Item> favorites = conn.getFavoriteItems(userId);
 		List<JSONObject> list = new ArrayList<>();
-		for (Item item : favorites) {
-			JSONObject obj = item.toJSONObject();
-			list.add(obj);
+		try {
+			for (Item item : favorites) {
+				JSONObject obj = item.toJSONObject();
+				obj.put("favorite", true);
+				list.add(obj);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		JSONArray array = new JSONArray(list);
 		RpcHelper.writeJsonArray(response, array);

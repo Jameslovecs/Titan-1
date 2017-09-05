@@ -101,6 +101,19 @@
     });
     category.innerHTML = 'Category: ' + item.categories.join(', ');
     section.appendChild(category);
+    
+    // local date and time
+    var localDate = $('p', {
+      className : 'item-date'
+    });
+    localDate.innerHTML = "Date: " + item.localDate;
+    section.appendChild(localDate);
+    
+    var localTime = $('p', {
+    	className : 'item-time'
+    });
+    localTime.innerHTML = "Time: " + (item.localTime == undefined ? "TBD" : item.localTime);
+    section.appendChild(localTime);
 
     var stars = $('div', {
       className : 'stars'
@@ -128,9 +141,11 @@
       className : 'item-address'
     });
 
-    address.innerHTML = item.address.replace(/,/g, '<br/>').replace(/\"/g,
-                                                                    '');
+    address.innerHTML = item.address.replace(/,/g, '<br/>').replace(/\"/g, '') + '<br/>' + item.city + ', ' + item.zipcode;
+    
     li.appendChild(address);
+    
+    
 
     // favorite link
     var favLink = $('p', {
@@ -262,6 +277,7 @@
         if (!items || items.length === 0) {
           showWarningMessage('No nearby item.');
         } else {
+          console.log("Nearby items: ", items);
           listItems(items);
         }
       }, 
@@ -297,6 +313,7 @@
         if (!items || items.length === 0) {
           showWarningMessage('No favorite item.');
         } else {
+          console.log("Favorite items: ", items);
           listItems(items);
         }
       }, 
@@ -333,6 +350,7 @@
         if (!items || items.length === 0) {
           showWarningMessage('No recommended item. Make sure you have favorites.');
         } else {
+          console.log("Recommend items: ", items);
           listItems(items);
         }
       },
@@ -385,8 +403,8 @@
     $('fav-btn').addEventListener('click', loadFavoriteItems);
     $('recommend-btn').addEventListener('click', loadRecommendedItems);
 
-    // initGeoLocation();
-    loadNearbyItems();
+    initGeoLocation();
+    // loadNearbyItems();
   }
 
   init();

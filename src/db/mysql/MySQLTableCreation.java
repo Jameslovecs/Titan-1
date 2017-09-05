@@ -59,7 +59,10 @@ public class MySQLTableCreation {
 					+ "snippet_url VARCHAR(255), "
 					+ "image_url VARCHAR(255), "
 					+ "url VARCHAR(255), "
+					+ "local_time VARCHAR(255), " // newly added local time
+					+ "local_date VARCHAR(255), " // newly added local date
 					+ "PRIMARY KEY (item_id))";
+					
 			
 			stmt.executeUpdate(sql);
 			

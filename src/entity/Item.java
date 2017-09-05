@@ -24,6 +24,10 @@ public class Item {
 	private String snippet;
 	private String snippetUrl;
 	
+	// added date and time
+	private String localDate;
+	private String localTime;
+	
 	/*
 	 * This is a builder pattern in Java.
 	 */
@@ -44,6 +48,8 @@ public class Item {
 		this.url = builder.url;
 		this.snippet = builder.snippet;
 		this.snippetUrl = builder.snippetUrl;
+		this.localDate = builder.localDate;
+		this.localTime = builder.localTime;
 	}
 	
 	public static class ItemBuilder {
@@ -63,6 +69,8 @@ public class Item {
 		private String url;
 		private String snippet;
 		private String snippetUrl;
+		private String localDate;
+		private String localTime;
 		
 		public ItemBuilder setItemId(String itemId) {
 			this.itemId = itemId;
@@ -143,6 +151,16 @@ public class Item {
 			this.snippetUrl = snippetUrl;
 			return this;
 		}
+		
+		public ItemBuilder setLocalDate(String localDate) {
+			this.localDate = localDate;
+			return this;
+		}
+		
+		public ItemBuilder setLocalTime(String localTime) {
+			this.localTime = localTime;
+			return this;
+		}
 
 		public Item build() {
 			return new Item(this);
@@ -168,6 +186,8 @@ public class Item {
 			obj.put("url", url);
 			obj.put("snippet_url", snippetUrl);
 			obj.put("snippet", snippet);
+			obj.put("localDate", localDate);
+			obj.put("localTime", localTime);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -221,6 +241,12 @@ public class Item {
 	}
 	public String getSnippetUrl() {
 		return snippetUrl;
+	}
+	public String getLocalDate() {
+		return localDate;
+	}
+	public String getLocalTime() {
+		return localTime;
 	}
 
 }
