@@ -34,7 +34,7 @@ public class TicketMasterAPI implements ExternalAPI {
 			term = DEFAULT_TERM;
 		}
 		term = urlEncodeHelper(term);
-		String query = String.format("apikey=%s&geoPoint=%s&keyword=%s", API_KEY, geohash, term);
+		String query = String.format("apikey=%s&geoPoint=%s&keyword=%s&sort=distance,asc", API_KEY, geohash, term);
 		try {
 			HttpURLConnection connection = (HttpURLConnection) new URL(url + "?" + query).openConnection();
 			connection.setRequestMethod("GET");
@@ -53,8 +53,11 @@ public class TicketMasterAPI implements ExternalAPI {
 			
 			// Extract events array only
 			JSONObject responseJson = new JSONObject(response.toString());
-			JSONObject embedded = (JSONObject) responseJson.get("_embedded");
-			JSONArray events = (JSONArray) embedded.get("events");
+			JSONArray events = new JSONArray();
+			if (!responseJson.isNull("_embedded")) {
+				JSONObject embedded = (JSONObject) responseJson.get("_embedded");
+				events = (JSONArray) embedded.get("events");
+			}
 			
 			System.out.println("Events" + events);
 			

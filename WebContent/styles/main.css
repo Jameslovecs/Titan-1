@@ -211,8 +211,17 @@ footer ul li {
   flex: 1;
 }
 
+#website:link {
+	color: white;
+}
 
+#website:visited {
+	color: white;
+}
 
+#email:link {
+	color: white;
+}
 
 
 
